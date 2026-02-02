@@ -244,22 +244,22 @@ function DivineLight() {
    SECTIONS
    ═══════════════════════════════════════════════════════════════ */
 
-function Navbar({ scrolled }) {
+function Navbar({ scrolled, pageType }) {
   const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   return (
     <nav className={`nav ${scrolled ? "nav--scrolled" : ""}`}>
       <div className="nav__inner">
-        {navItems.map((item) => (
+       {navItems.filter(item => pageType === "cotistas" || (item !== "Cotas" && item !== "Contato")).map((item) =>
           <button key={item} className="nav__link" onClick={() => scrollTo(item.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))}>
             {item}
           </button>
-        ))}
+        )}
       </div>
     </nav>
   );
 }
 
-function Hero() {
+function Hero({ pageType }) {
   return (
     <section className="hero">
       <div className="hero__bg">
@@ -270,6 +270,33 @@ function Hero() {
       <DivineLight />
       <Particles />
       <Vignette />
+
+      {/* Brasão + Prefeitura apresenta */}
+      {(pageType === "lindoia" || pageType === "socorro") && (
+        <div style={{ 
+          position: "absolute",
+          top: "120px",
+          left: 0,
+          right: 0,
+          zIndex: 2,
+          textAlign: "center",
+        }} className="anim-up">
+          <img 
+            src={pageType === "lindoia" ? "/brasao-lindoia.png" : "/brasao-socorro.png"} 
+            alt={`Brasão de ${pageType === "lindoia" ? "Lindóia" : "Socorro"}`}
+            style={{ width: "80px", marginBottom: "10px" }}
+          />
+          <p style={{ 
+            fontFamily: "'Cinzel', serif", 
+            fontSize: "0.85rem", 
+            letterSpacing: "0.2em", 
+            color: "#C8A961",
+            textTransform: "uppercase" 
+          }}>
+            A Prefeitura de {pageType === "lindoia" ? "Lindóia" : "Socorro"} apresenta
+          </p>
+        </div>
+      )}
 
       <div className="hero__content">
         <span className="hero__cross">✝</span>
@@ -284,7 +311,7 @@ function Hero() {
         <p className="hero__region anim-up d4">{siteConfig.region}</p>
 
         <div className="hero__cards anim-up d5">
-          {cities.map((c) => (
+          {cities.filter(c => pageType === "cotistas" || pageType === "principal" || c.slug === pageType).map((c) =>
             <div key={c.slug} className="hero__card">
               <div className="hero__card-bar" />
               <p className="hero__card-city">{c.city} — {c.state}</p>
@@ -292,7 +319,7 @@ function Hero() {
               <p className="hero__card-date">{c.dateFormatted}</p>
               <p className="hero__card-info">{c.time} · {c.venue}</p>
             </div>
-          ))}
+          )}
         </div>
 
 
@@ -726,7 +753,7 @@ function DivulgacaoSection({ vis }) {
   );
 }
 
-function LocaisSection({ vis }) {
+function LocaisSection({ vis, pageType }) {
   return (
     <section id="locais" data-anim className="sec">
       <div className="sec__overlay" />
@@ -736,7 +763,7 @@ function LocaisSection({ vis }) {
         <OrnamentLine />
 
         <div className="locais">
-          {cities.map((c) => (
+          {cities.filter(c => pageType === "cotistas" || pageType === "principal" || c.slug === pageType).map((c) => (
             <div key={c.slug} className="local">
               <div className="local__bar" />
               <div className="local__content">
@@ -858,7 +885,7 @@ function Footer() {
   );
 }
 
-function IntroScreen({ onEnter }) {
+function IntroScreen({ onEnter, pageType }) {
   const videoRef = useRef(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);
@@ -866,8 +893,8 @@ function IntroScreen({ onEnter }) {
   useEffect(() => {
     // Tenta dar play no vídeo com áudio
     if (videoRef.current) {
+      videoRef.current.volume = 0.5;
       videoRef.current.play().catch(() => {
-        // Se o browser bloquear autoplay com áudio, tenta sem áudio
         if (videoRef.current) {
           videoRef.current.muted = true;
           videoRef.current.play().catch(() => {});
@@ -886,21 +913,21 @@ function IntroScreen({ onEnter }) {
   const handleEnter = () => {
     setFadeOut(true);
 
-    // Pega o tempo atual do vídeo pra continuar de onde parou
-    const currentTime = videoRef.current ? videoRef.current.currentTime : 0;
-
-    // Cria áudio de fundo sincronizado com o vídeo (sempre baixo)
-    const bgAudio = new Audio("/intro.mp4");
-    bgAudio.loop = true;
-    bgAudio.currentTime = currentTime;
-    bgAudio.volume = 0.5;
-    bgAudio.play();
-
-    // Guarda referência global
-    window.__bgAudio = bgAudio;
+    if (videoRef.current && !videoRef.current.paused) {
+      const bgAudio = new Audio("/intro.mp4");
+      bgAudio.loop = true;
+      bgAudio.volume = 0.5;
+      // Avança um pouquinho pra compensar o delay de início
+      bgAudio.currentTime = videoRef.current.currentTime + 0.15;
+      bgAudio.play().catch(() => {});
+      
+      // Muta o vídeo pra não sobrepor
+      videoRef.current.muted = true;
+      
+      window.__bgAudio = bgAudio;
+    }
 
     setTimeout(() => {
-      if (videoRef.current) videoRef.current.pause();
       onEnter();
     }, 1200);
   };
@@ -951,6 +978,34 @@ function IntroScreen({ onEnter }) {
         }}
       />
 
+      {/* Brasão + Prefeitura apresenta */}
+      {(pageType === "lindoia" || pageType === "socorro") && (
+        <div style={{ 
+          position: "absolute",
+          top: "12%",
+          left: 0,
+          right: 0,
+          zIndex: 2,
+          textAlign: "center",
+          animation: "introContentAppear 2s ease forwards",
+        }}>
+          <img 
+            src={pageType === "lindoia" ? "/brasao-lindoia.png" : "/brasao-socorro.png"} 
+            alt={`Brasão de ${pageType === "lindoia" ? "Lindóia" : "Socorro"}`}
+            style={{ width: "80px", marginBottom: "10px" }}
+          />
+          <p style={{ 
+            fontFamily: "'Cinzel', serif", 
+            fontSize: "0.85rem", 
+            letterSpacing: "0.2em", 
+            color: "#C8A961",
+            textTransform: "uppercase" 
+          }}>
+            A Prefeitura de {pageType === "lindoia" ? "Lindóia" : "Socorro"} apresenta
+          </p>
+        </div>
+      )}
+      
       {/* Conteúdo centralizado */}
       <div
         style={{
@@ -961,12 +1016,13 @@ function IntroScreen({ onEnter }) {
           animation: "introContentAppear 2s ease forwards",
         }}
       >
+
         {/* Cruz */}
         <div
           style={{
             fontSize: "3rem",
             color: "#C8A961",
-            marginBottom: "2rem",
+            marginBottom: "1rem",
             textShadow: "0 0 40px rgba(200,169,97,0.5)",
             animation: "crossPulse 3s ease-in-out infinite",
           }}
@@ -1066,7 +1122,7 @@ function IntroScreen({ onEnter }) {
    MAIN APP
    ═══════════════════════════════════════════════════════════════ */
 
-export default function PaixaoDeCristo() {
+export default function PaixaoDeCristo({ pageType = "cotistas" }) {
   const [scrolled, setScrolled] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const vis = useScrollReveal();
@@ -1084,7 +1140,7 @@ export default function PaixaoDeCristo() {
 
   return (
     <>
-    {showIntro && <IntroScreen onEnter={() => setShowIntro(false)} />}
+    {showIntro && <IntroScreen onEnter={() => setShowIntro(false)} pageType={pageType} />}
       <style>{`
 /* ═══════════════════════════════════════════
    CSS VARIABLES
@@ -2521,8 +2577,8 @@ body { background: #0a0806; overflow-x: hidden; }
         <div className="site-bg-tint" />
         <div className="grain" />
         <div className="scroll-progress" style={{ transform: `scaleX(${scrollProgress})` }} />
-        <Navbar scrolled={scrolled} />
-        <Hero />
+        <Navbar scrolled={scrolled} pageType={pageType} />
+        <Hero pageType={pageType} />
         <SinopseSection vis={vis["sinopse"]} />
         <MissaoSection vis={vis["missao"]} />
         <ProtagonistaSection vis={vis["protagonista"]} />
@@ -2533,9 +2589,9 @@ body { background: #0a0806; overflow-x: hidden; }
         <JustificativaSection vis={vis["justificativa"]} />
         <PublicoSection vis={vis["publico"]} />
         <DivulgacaoSection vis={vis["divulgacao"]} />
-        <CotasSection vis={vis["cotas"]} />
-        <LocaisSection vis={vis["locais"]} />
-        <ContatoSection vis={vis["contato"]} />
+        {pageType === "cotistas" && <CotasSection vis={vis["cotas"]} />}
+        <LocaisSection vis={vis["locais"]} pageType={pageType} />
+        {pageType === "cotistas" && <ContatoSection vis={vis["contato"]} />}
         <Footer />
       </div>
     </>
