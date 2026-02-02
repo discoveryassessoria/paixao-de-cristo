@@ -109,7 +109,7 @@ const equipe = [
   },
   {
     name: "Breno Floriz",
-    role: "Produção e Direção Teatral",
+    role: "Produção e Direção",
     bio: 'Dentre suas criações mais recentes estão "Encanto das Luzes" | Parada de Natal com a prefeitura de Serra Negra-SP. Em 2025, adaptou, dirigiu e atuou em HAMLET de Shakespeare.',
     photo: BRENO_IMG,
   },
