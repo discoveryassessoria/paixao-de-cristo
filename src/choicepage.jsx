@@ -81,21 +81,7 @@ export default function ChoicePage() {
           O Maior Espetáculo da Fé
         </p>
 
-        {/* Texto escolha */}
-        <p
-          style={{
-            fontFamily: "'Cinzel', serif",
-            fontSize: "0.85rem",
-            color: "#7A7060",
-            letterSpacing: "0.2em",
-            textTransform: "uppercase",
-            marginBottom: "1.5rem",
-          }}
-        >
-          Escolha sua experiência
-        </p>
-
-        {/* Botões de escolha */}
+        {/* Botão Lindóia */}
         <div
           style={{
             display: "flex",
@@ -104,7 +90,6 @@ export default function ChoicePage() {
             alignItems: "center",
           }}
         >
-          {/* Lindóia */}
           <button
             onClick={() => navigate('/lindoia')}
             style={{
@@ -134,72 +119,6 @@ export default function ChoicePage() {
             Lindóia — SP
             <span style={{ display: "block", fontSize: "0.7rem", marginTop: "4px", letterSpacing: "0.15em", opacity: 0.8 }}>
               28 de Março de 2026
-            </span>
-          </button>
-
-          {/* Socorro */}
-          <button
-            onClick={() => navigate('/socorro')}
-            style={{
-              fontFamily: "'Cinzel', serif",
-              fontSize: "0.85rem",
-              letterSpacing: "0.25em",
-              textTransform: "uppercase",
-              padding: "16px 50px",
-              border: "1px solid #C8A961",
-              background: "transparent",
-              color: "#C8A961",
-              cursor: "pointer",
-              transition: "all 0.5s ease",
-              minWidth: "280px",
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = "linear-gradient(135deg, #9B7B30, #C8A961)";
-              e.target.style.color = "#050505";
-              e.target.style.boxShadow = "0 0 40px rgba(200,169,97,0.4)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = "transparent";
-              e.target.style.color = "#C8A961";
-              e.target.style.boxShadow = "none";
-            }}
-          >
-            Socorro — SP
-            <span style={{ display: "block", fontSize: "0.7rem", marginTop: "4px", letterSpacing: "0.15em", opacity: 0.8 }}>
-              03 de Abril de 2026
-            </span>
-          </button>
-
-          {/* Principal */}
-          <button
-            onClick={() => navigate('/principal')}
-            style={{
-              fontFamily: "'Cinzel', serif",
-              fontSize: "0.85rem",
-              letterSpacing: "0.25em",
-              textTransform: "uppercase",
-              padding: "16px 50px",
-              border: "1px solid #C8A961",
-              background: "transparent",
-              color: "#C8A961",
-              cursor: "pointer",
-              transition: "all 0.5s ease",
-              minWidth: "280px",
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = "linear-gradient(135deg, #9B7B30, #C8A961)";
-              e.target.style.color = "#050505";
-              e.target.style.boxShadow = "0 0 40px rgba(200,169,97,0.4)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = "transparent";
-              e.target.style.color = "#C8A961";
-              e.target.style.boxShadow = "none";
-            }}
-          >
-            Todas as Cidades
-            <span style={{ display: "block", fontSize: "0.7rem", marginTop: "4px", letterSpacing: "0.15em", opacity: 0.8 }}>
-              Lindóia & Socorro
             </span>
           </button>
         </div>
