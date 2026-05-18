@@ -1,6 +1,29 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const choices = [
+  {
+    path: '/lindoia',
+    label: 'Lindóia — SP',
+    sub: '28 de Março de 2026',
+  },
+  {
+    path: '/socorro',
+    label: 'Socorro — SP',
+    sub: '03 de Abril de 2026',
+  },
+  {
+    path: '/cotistas',
+    label: 'Cotistas',
+    sub: 'Patrocinadores',
+  },
+  {
+    path: '/principal',
+    label: 'Página Principal',
+    sub: 'Visão completa',
+  },
+];
+
 export default function ChoicePage() {
   const navigate = useNavigate();
 
@@ -22,6 +45,8 @@ export default function ChoicePage() {
         alignItems: "center",
         justifyContent: "center",
         background: "#050505",
+        overflowY: "auto",
+        padding: "2rem 1rem",
       }}
     >
       {/* Conteúdo */}
@@ -30,8 +55,9 @@ export default function ChoicePage() {
           position: "relative",
           zIndex: 2,
           textAlign: "center",
-          padding: "2rem",
+          padding: "2rem 1rem",
           animation: "introContentAppear 2s ease forwards",
+          maxWidth: "100%",
         }}
       >
         {/* Cruz */}
@@ -81,7 +107,7 @@ export default function ChoicePage() {
           O Maior Espetáculo da Fé
         </p>
 
-        {/* Botão Lindóia */}
+        {/* Botões */}
         <div
           style={{
             display: "flex",
@@ -90,37 +116,48 @@ export default function ChoicePage() {
             alignItems: "center",
           }}
         >
-          <button
-            onClick={() => navigate('/lindoia')}
-            style={{
-              fontFamily: "'Cinzel', serif",
-              fontSize: "0.85rem",
-              letterSpacing: "0.25em",
-              textTransform: "uppercase",
-              padding: "16px 50px",
-              border: "1px solid #C8A961",
-              background: "transparent",
-              color: "#C8A961",
-              cursor: "pointer",
-              transition: "all 0.5s ease",
-              minWidth: "280px",
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = "linear-gradient(135deg, #9B7B30, #C8A961)";
-              e.target.style.color = "#050505";
-              e.target.style.boxShadow = "0 0 40px rgba(200,169,97,0.4)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = "transparent";
-              e.target.style.color = "#C8A961";
-              e.target.style.boxShadow = "none";
-            }}
-          >
-            Lindóia — SP
-            <span style={{ display: "block", fontSize: "0.7rem", marginTop: "4px", letterSpacing: "0.15em", opacity: 0.8 }}>
-              28 de Março de 2026
-            </span>
-          </button>
+          {choices.map((c) => (
+            <button
+              key={c.path}
+              onClick={() => navigate(c.path)}
+              style={{
+                fontFamily: "'Cinzel', serif",
+                fontSize: "0.85rem",
+                letterSpacing: "0.25em",
+                textTransform: "uppercase",
+                padding: "16px 50px",
+                border: "1px solid #C8A961",
+                background: "transparent",
+                color: "#C8A961",
+                cursor: "pointer",
+                transition: "all 0.5s ease",
+                minWidth: "300px",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "linear-gradient(135deg, #9B7B30, #C8A961)";
+                e.currentTarget.style.color = "#050505";
+                e.currentTarget.style.boxShadow = "0 0 40px rgba(200,169,97,0.4)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.color = "#C8A961";
+                e.currentTarget.style.boxShadow = "none";
+              }}
+            >
+              {c.label}
+              <span
+                style={{
+                  display: "block",
+                  fontSize: "0.7rem",
+                  marginTop: "4px",
+                  letterSpacing: "0.15em",
+                  opacity: 0.8,
+                }}
+              >
+                {c.sub}
+              </span>
+            </button>
+          ))}
         </div>
 
         {/* Tagline */}
@@ -145,7 +182,7 @@ export default function ChoicePage() {
       {/* CSS Animations */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap');
-        
+
         @keyframes introContentAppear {
           0% { opacity: 0; transform: translateY(30px); }
           100% { opacity: 1; transform: translateY(0); }
